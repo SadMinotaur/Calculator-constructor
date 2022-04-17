@@ -1,0 +1,26 @@
+.base {
+  min-height: 48px;
+  width: 100%;
+  color: black;
+  font-size: 14px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  transition: all 0.2s;
+  cursor: pointer;
+  user-select: none;
+}
+
+.whiteColor {
+  background: white;
+  border-color: $kit-hover-white;
+  &:hover {
+    border: 2px solid $kit-blue;
+  }
+}
+
+.blueColor {
+  min-height: 64px;
+  background: $kit-blue;
+  border-color: $kit-blue;
+  color: white;
+}
