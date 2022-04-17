@@ -1,5 +1,8 @@
 import React from "react";
+import classNames from "classnames/bind";
 import styles from "./Button.module.scss";
+
+const cnb = classNames.bind(styles);
 
 enum BColor {
   white = "whiteColor",
@@ -12,11 +15,7 @@ interface Props extends OmitedButtonProps {
 }
 
 const Button: React.FC<Props> = ({ color, className, ...props }) => (
-  <button
-    {...props}
-    type='button'
-    className={`${styles.base} ${styles[BColor[color]]} ${className}`}
-  />
+  <button {...props} type='button' className={cnb("base", BColor[color], className)} />
 );
 
 export default Button;
