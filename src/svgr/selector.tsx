@@ -1,6 +1,6 @@
 import React from "react";
 
-const SelectorSvg = (props: React.SVGProps<SVGSVGElement>) => (
+const SelectorSvg: React.FC = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={20}
     height={20}

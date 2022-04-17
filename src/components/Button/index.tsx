@@ -9,13 +9,26 @@ enum BColor {
   blue = "blueColor"
 }
 
-type OmitedButtonProps = Omit<React.HTMLProps<HTMLButtonElement>, "type">;
-interface Props extends OmitedButtonProps {
+type OmitedButtonProps = Omit<React.HTMLProps<HTMLButtonElement>, "type" | "onClick">;
+export interface ButtonProps<T> extends OmitedButtonProps {
   color: keyof typeof BColor;
+  buttonValue: T;
+  onClick?: (val: T) => void;
 }
 
-const Button: React.FC<Props> = ({ color, className, ...props }) => (
-  <button {...props} type='button' className={cnb("base", BColor[color], className)} />
+const Button = <T,>({
+  color,
+  buttonValue,
+  className,
+  onClick,
+  ...props
+}: React.PropsWithChildren<ButtonProps<T>>): React.ReactElement => (
+  <button
+    {...props}
+    type='button'
+    onClick={() => onClick?.(buttonValue)}
+    className={cnb("base", BColor[color], className)}
+  />
 );
 
 export default Button;

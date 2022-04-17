@@ -1,6 +1,6 @@
 import React from "react";
 
-const EyeSvg = (props: React.SVGProps<SVGSVGElement>) => (
+const EyeSvg: React.FC = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={20}
     height={20}
