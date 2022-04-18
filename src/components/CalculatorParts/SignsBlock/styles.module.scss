@@ -1,0 +1,9 @@
+.wrapper {
+  display: flex;
+  gap: 0 8px;
+  justify-content: space-between;
+
+  > button {
+    max-width: 54px;
+  }
+}

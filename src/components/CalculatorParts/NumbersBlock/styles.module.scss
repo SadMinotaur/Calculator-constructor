@@ -1,0 +1,18 @@
+.wrapper {
+  display: grid;
+  grid-auto-columns: 1fr;
+  gap: 8px;
+  grid-template-areas:
+    ". . ."
+    ". . ."
+    ". . ."
+    "zero zero dot";
+}
+
+.zero {
+  grid-area: zero;
+}
+
+.dot {
+  grid-area: dot;
+}

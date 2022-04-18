@@ -1,0 +1,64 @@
+.container {
+  padding: 30px 0;
+  width: 100%;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-template-rows: min-content 1fr;
+  gap: 30px 52px;
+  grid-template-areas:
+    ". controls"
+    "elements dropArea";
+
+  .controls {
+    grid-area: controls;
+  }
+
+  .elements {
+    grid-area: elements;
+    display: flex;
+    justify-content: flex-end;
+
+    .box {
+      max-width: 240px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px 0;
+    }
+  }
+
+  .dropArea {
+    grid-area: dropArea;
+
+    .area {
+      width: 243px;
+      height: 480px;
+      border: 2px dashed #c4c4c4;
+      box-sizing: border-box;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+
+      .desc {
+        text-align: center;
+        > h6 {
+          margin: 12px 0 4px 0;
+          font-family: Inter;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 17px;
+          color: $kit-blue;
+        }
+
+        > p {
+          font-family: Inter;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 15px;
+          color: #6b7280;
+        }
+      }
+    }
+  }
+}
