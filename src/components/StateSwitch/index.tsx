@@ -12,8 +12,8 @@ enum ActiveTab {
 }
 type Tab = keyof typeof ActiveTab;
 interface Props {
-  active?: Tab;
-  onClick?: (tab: Tab) => void;
+  readonly active?: Tab;
+  readonly onClick?: (tab: Tab) => void;
 }
 
 const StateSwitch: React.FC<Props> = ({ active, onClick }) => (

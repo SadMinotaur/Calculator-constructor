@@ -41,6 +41,7 @@ module.exports = {
     "react/jsx-props-no-spreading": "warn",
     "@typescript-eslint/naming-convention": "warn",
     "react-hooks/exhaustive-deps": "warn",
-    "global-require": "warn"
+    "global-require": "warn",
+    "react/no-array-index-key": "warn"
   }
 };

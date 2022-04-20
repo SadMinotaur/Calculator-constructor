@@ -1,14 +1,27 @@
 import React from "react";
 import Button from "@components/Button";
+import { useDraggable } from "@dnd-kit/core";
+import { draggingStyles, DragProps } from "@utils/dndUtils";
 
-// interface Props {}
+const EqualitySign: React.FC<DragProps> = ({ blockDrag }) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: "equality",
+    disabled: blockDrag
+  });
 
-const EqualSign: React.FC = () => (
-  <div className='blocksPadding'>
-    <Button color='blue' buttonValue='='>
-      =
-    </Button>
-  </div>
-);
+  return (
+    <div
+      className='blocksPadding'
+      ref={setNodeRef}
+      style={draggingStyles(transform, isDragging)}
+      {...listeners}
+      {...attributes}
+    >
+      <Button color='blue' buttonValue='='>
+        =
+      </Button>
+    </div>
+  );
+};
 
-export default EqualSign;
+export default EqualitySign;
