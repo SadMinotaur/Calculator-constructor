@@ -9,7 +9,7 @@ enum BColor {
   blue = "blueColor"
 }
 
-type OmitedButtonProps = Omit<React.HTMLProps<HTMLButtonElement>, "type" | "onClick">;
+type OmitedButtonProps = Omit<Readonly<React.HTMLProps<HTMLButtonElement>>, "type" | "onClick">;
 export interface ButtonProps<T> extends OmitedButtonProps {
   readonly color: keyof typeof BColor;
   readonly buttonValue: T;
