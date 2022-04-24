@@ -7,15 +7,20 @@ import styles from "./styles.module.scss";
 
 const cnb = classNames.bind(styles);
 
-const SignsBlock: React.FC<DragProps> = ({ blockDrag }) => {
+const SignsBlock: React.FC<DragProps> = ({ blockDrag, id }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: "signs",
+    id,
     disabled: blockDrag
   });
 
   return (
     <div
-      className={cnb("blocksPadding", "wrapper")}
+      className={cnb(
+        "blocksPadding",
+        "wrapper",
+        { cursorMove: isDragging },
+        { staticElement: blockDrag }
+      )}
       ref={setNodeRef}
       style={draggingStyles(transform, isDragging)}
       {...listeners}

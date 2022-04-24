@@ -9,17 +9,17 @@ interface Props {
   readonly hasElements?: boolean;
 }
 
-const DroppableArea: React.FC<Props> = ({ children }) => {
+const DroppableArea: React.FC<Props> = ({ children, hasElements }) => {
   const { isOver, setNodeRef } = useDroppable({
     id: "area"
   });
 
   const style = {
-    background: isOver ? "#F0F9FF" : undefined
+    background: !hasElements && isOver ? "#F0F9FF" : undefined
   };
 
   return (
-    <div className={cnb("area")} ref={setNodeRef} style={style}>
+    <div className={cnb("area", { filled: hasElements })} ref={setNodeRef} style={style}>
       {children}
     </div>
   );

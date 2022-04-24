@@ -1,14 +1,12 @@
 import React from "react";
 import StateSwitch from "@components/StateSwitch";
-import EqualitySign from "@components/CalculatorParts/EqualBlock";
-import SignsBlock from "@components/CalculatorParts/SignsBlock";
-import NumbersBlock from "@components/CalculatorParts/NumbersBlock";
-import MonitorBlock from "@components/CalculatorParts/MonitorBlock";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@store/store";
 import DroppableArea from "@components/CalculatorParts/DroppableArea/DroppableArea";
 import ImageSvg from "@src/svgr/image";
+import { appendToConstructorColumn, setChangeMode } from "@store/columns";
+import { isInEnumTypeGuard, ComponentsTypes, ConstructorState } from "@store/columns/types";
 import classNames from "classnames/bind";
 import styles from "./styles.module.scss";
 import RenderAreaElements from "./RenderAreaElements";
@@ -16,35 +14,48 @@ import RenderAreaElements from "./RenderAreaElements";
 const cnb = classNames.bind(styles);
 
 const Workspace: React.FC = () => {
+  const dispatch = useDispatch();
   const monitor = useSelector((state: RootState) => state.monitor);
-  const [parent, setParent] = React.useState<string[]>([]);
+  const columns = useSelector((state: RootState) => state.columns);
+
+  const areaNotEmpty: boolean = columns.constructorColumn.length > 0;
 
   function handleDragEnd({ over, active }: DragEndEvent): void {
     if (over?.id === "area" && active.id) {
-      setParent(Array.from(new Set([...parent, active.id])));
+      const elementType = active.id.split(" ")[0];
+      if (isInEnumTypeGuard(ComponentsTypes, elementType)) {
+        dispatch(appendToConstructorColumn(elementType));
+      }
     }
   }
 
-  const areaNotEmpty = parent.length > 0;
+  function stateSwitch(tab: ConstructorState): void {
+    dispatch(setChangeMode(tab));
+  }
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <div className={cnb("container")}>
         <div className={cnb("elements")}>
           <div className={cnb("box")}>
-            <MonitorBlock value={monitor.value} />
-            <SignsBlock />
-            <NumbersBlock />
-            <EqualitySign />
+            <RenderAreaElements
+              elements={columns.elementsColumn}
+              monitorValue={monitor.value}
+              keyPostfix='elements'
+            />
           </div>
         </div>
         <div className={cnb("controls")}>
-          <StateSwitch active='constructor' />
+          <StateSwitch active={columns.constructorState} onClick={stateSwitch} />
         </div>
         <div className={cnb("dropArea")}>
           <DroppableArea hasElements={areaNotEmpty}>
             {areaNotEmpty ? (
-              <RenderAreaElements array={parent} monitorValue={monitor.value} />
+              <RenderAreaElements
+                elements={columns.constructorColumn}
+                monitorValue={monitor.value}
+                keyPostfix='constructor'
+              />
             ) : (
               <div className={cnb("desc")}>
                 <ImageSvg />

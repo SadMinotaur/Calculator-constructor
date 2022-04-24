@@ -1,14 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface MonitorState {
-  value: string;
-}
-
-const initialState = { value: "0" } as MonitorState;
-
 const monitorStateSlice = createSlice({
   name: "monitorState",
-  initialState,
+  initialState: { value: "0" } as {
+    value: string;
+  },
   reducers: {
     appendValue(state, action: PayloadAction<string>) {
       state.value += action.payload;

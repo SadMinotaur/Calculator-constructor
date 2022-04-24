@@ -38,3 +38,16 @@ body,
   border-radius: 4px;
   padding: 4px;
 }
+
+.staticElement {
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+.cursorMove {
+  cursor: move;
+  > * {
+    cursor: move;
+  }
+}

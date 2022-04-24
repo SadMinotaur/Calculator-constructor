@@ -14,6 +14,7 @@ export function draggingStyles(
 }
 
 export interface DragProps {
+  readonly id: string;
   readonly blockDrag?: boolean;
   readonly disabledBlock?: boolean;
 }
