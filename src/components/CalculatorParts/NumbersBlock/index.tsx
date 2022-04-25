@@ -2,13 +2,13 @@ import React from "react";
 import classNames from "classnames/bind";
 import Button from "@components/Button";
 import { draggingStyles, DragProps } from "@utils/dndUtils";
-import { useDraggable } from "@dnd-kit/core";
+import { useSortable } from "@dnd-kit/sortable";
 import styles from "./styles.module.scss";
 
 const cnb = classNames.bind(styles);
 
 const NumbersBlock: React.FC<DragProps> = ({ blockDrag, id }) => {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({
     id,
     disabled: blockDrag
   });

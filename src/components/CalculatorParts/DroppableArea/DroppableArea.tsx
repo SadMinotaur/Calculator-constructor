@@ -11,7 +11,7 @@ interface Props {
 
 const DroppableArea: React.FC<Props> = ({ children, hasElements }) => {
   const { isOver, setNodeRef } = useDroppable({
-    id: "area"
+    id: "area constructor"
   });
 
   const style = {

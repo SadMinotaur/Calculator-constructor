@@ -1,6 +1,7 @@
 export enum ElementState {
   draggable = "draggable",
-  static = "static"
+  static = "static",
+  runtime = "runtime"
 }
 
 export enum ComponentsTypes {
@@ -13,6 +14,7 @@ export enum ComponentsTypes {
 export interface ColumnElement {
   state: ElementState;
   type: ComponentsTypes;
+  id: string;
 }
 
 export enum ConstructorState {

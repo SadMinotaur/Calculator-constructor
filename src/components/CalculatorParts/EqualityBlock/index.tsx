@@ -1,11 +1,11 @@
 import React from "react";
 import Button from "@components/Button";
-import { useDraggable } from "@dnd-kit/core";
 import { draggingStyles, DragProps } from "@utils/dndUtils";
 import classNames from "classnames";
+import { useSortable } from "@dnd-kit/sortable";
 
 const EqualitySign: React.FC<DragProps> = ({ blockDrag, id }) => {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({
     id,
     disabled: blockDrag
   });

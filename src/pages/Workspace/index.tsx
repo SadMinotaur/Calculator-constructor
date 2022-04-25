@@ -1,48 +1,105 @@
 import React from "react";
 import StateSwitch from "@components/StateSwitch";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  KeyboardSensor,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors
+} from "@dnd-kit/core";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@store/store";
 import DroppableArea from "@components/CalculatorParts/DroppableArea/DroppableArea";
 import ImageSvg from "@src/svgr/image";
 import { appendToConstructorColumn, setChangeMode } from "@store/columns";
-import { isInEnumTypeGuard, ComponentsTypes, ConstructorState } from "@store/columns/types";
+import {
+  isInEnumTypeGuard,
+  ComponentsTypes,
+  ConstructorState,
+  ElementState
+} from "@store/columns/types";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  horizontalListSortingStrategy,
+  rectSortingStrategy,
+  rectSwappingStrategy,
+  verticalListSortingStrategy
+} from "@dnd-kit/sortable";
 import classNames from "classnames/bind";
 import styles from "./styles.module.scss";
 import RenderAreaElements from "./RenderAreaElements";
+import RenderElement from "./RenderElement";
 
 const cnb = classNames.bind(styles);
 
 const Workspace: React.FC = () => {
+  const [activeId, setActiveId] = React.useState<string | null>(null);
+
   const dispatch = useDispatch();
-  const monitor = useSelector((state: RootState) => state.monitor);
   const columns = useSelector((state: RootState) => state.columns);
-
   const areaNotEmpty: boolean = columns.constructorColumn.length > 0;
-
-  function handleDragEnd({ over, active }: DragEndEvent): void {
-    if (over?.id === "area" && active.id) {
-      const elementType = active.id.split(" ")[0];
-      if (isInEnumTypeGuard(ComponentsTypes, elementType)) {
-        dispatch(appendToConstructorColumn(elementType));
-      }
-    }
-  }
+  const sortableContexItems = columns.constructorColumn.map((el) => el.id);
 
   function stateSwitch(tab: ConstructorState): void {
     dispatch(setChangeMode(tab));
   }
 
+  function idParse(id: string): ComponentsTypes | null {
+    const type = id.split(" ")?.[0];
+    return isInEnumTypeGuard(ComponentsTypes, type) ? type : null;
+  }
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates
+    }),
+    useSensor(TouchSensor)
+  );
+
+  function handleDragEnd(event: DragEndEvent): void {
+    const isOverConstructor = event.over?.id.split(" ")?.[1] === "constructor";
+    if (isOverConstructor && event.active.id) {
+      const type = idParse(event.active.id);
+      if (type) dispatch(appendToConstructorColumn(type));
+    }
+    setActiveId(null);
+  }
+
+  function handleDragStart(event: DragStartEvent) {
+    const { active } = event;
+    setActiveId(active.id);
+  }
+
+  const RenderOverlay = () => {
+    const type: ComponentsTypes | null = activeId ? idParse(activeId) : null;
+    return (
+      <DragOverlay>
+        {activeId && type ? (
+          <RenderElement el={{ id: activeId, state: ElementState.static, type }} />
+        ) : null}
+      </DragOverlay>
+    );
+  };
+
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext
+      collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      sensors={sensors}
+    >
       <div className={cnb("container")}>
         <div className={cnb("elements")}>
           <div className={cnb("box")}>
-            <RenderAreaElements
-              elements={columns.elementsColumn}
-              monitorValue={monitor.value}
-              keyPostfix='elements'
-            />
+            <RenderAreaElements elements={columns.elementsColumn} />
           </div>
         </div>
         <div className={cnb("controls")}>
@@ -51,11 +108,9 @@ const Workspace: React.FC = () => {
         <div className={cnb("dropArea")}>
           <DroppableArea hasElements={areaNotEmpty}>
             {areaNotEmpty ? (
-              <RenderAreaElements
-                elements={columns.constructorColumn}
-                monitorValue={monitor.value}
-                keyPostfix='constructor'
-              />
+              <SortableContext items={sortableContexItems} strategy={verticalListSortingStrategy}>
+                <RenderAreaElements elements={columns.constructorColumn} />
+              </SortableContext>
             ) : (
               <div className={cnb("desc")}>
                 <ImageSvg />
@@ -67,6 +122,7 @@ const Workspace: React.FC = () => {
               </div>
             )}
           </DroppableArea>
+          <RenderOverlay />
         </div>
       </div>
     </DndContext>

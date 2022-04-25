@@ -3,10 +3,26 @@ import { ColumnsState, ComponentsTypes, ConstructorState, ElementState } from ".
 
 const initialState = {
   elementsColumn: [
-    { state: ElementState.draggable, type: ComponentsTypes.monitor },
-    { state: ElementState.draggable, type: ComponentsTypes.signs },
-    { state: ElementState.draggable, type: ComponentsTypes.numbers },
-    { state: ElementState.draggable, type: ComponentsTypes.equality }
+    {
+      state: ElementState.draggable,
+      type: ComponentsTypes.monitor,
+      id: `${ComponentsTypes.monitor} element`
+    },
+    {
+      state: ElementState.draggable,
+      type: ComponentsTypes.signs,
+      id: `${ComponentsTypes.signs} element`
+    },
+    {
+      state: ElementState.draggable,
+      type: ComponentsTypes.numbers,
+      id: `${ComponentsTypes.numbers} element`
+    },
+    {
+      state: ElementState.draggable,
+      type: ComponentsTypes.equality,
+      id: `${ComponentsTypes.equality} element`
+    }
   ],
   constructorColumn: [],
   constructorState: ConstructorState.constructor
@@ -24,7 +40,8 @@ const columnsStateSlice = createSlice({
         }));
         state.constructorColumn = state.constructorColumn.concat({
           state: ElementState.draggable,
-          type: action.payload
+          type: action.payload,
+          id: `${action.payload} constructor`
         });
       }
     },
