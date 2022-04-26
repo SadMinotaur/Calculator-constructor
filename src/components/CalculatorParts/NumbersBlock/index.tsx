@@ -1,17 +1,35 @@
 import React from "react";
 import classNames from "classnames/bind";
 import Button from "@components/Button";
-import { draggingStyles, DragProps } from "@utils/dndUtils";
+import { draggingStyles, CalculatorElementsProps } from "@utils/dndUtils";
 import { useSortable } from "@dnd-kit/sortable";
+import { useDispatch } from "react-redux";
+import { appendValue, setNextDot } from "@store/monitor";
 import styles from "./styles.module.scss";
 
 const cnb = classNames.bind(styles);
 
-const NumbersBlock: React.FC<DragProps> = ({ blockDrag, id }) => {
+const NumbersBlock: React.FC<CalculatorElementsProps> = ({
+  blockDrag,
+  id,
+  noBorder,
+  isStatic,
+  runtime
+}) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({
     id,
     disabled: blockDrag
   });
+
+  const dispatch = useDispatch();
+
+  function onClickDigits(val: number): void {
+    if (runtime) dispatch(appendValue(val.toString()));
+  }
+
+  function onClickDot(): void {
+    if (runtime) dispatch(setNextDot(true));
+  }
 
   return (
     <div
@@ -19,22 +37,26 @@ const NumbersBlock: React.FC<DragProps> = ({ blockDrag, id }) => {
         "blocksPadding",
         "wrapper",
         { cursorMove: isDragging },
-        { staticElement: blockDrag }
+        { staticElement: isStatic },
+        { noBorder }
       )}
       ref={setNodeRef}
       style={draggingStyles(transform, isDragging)}
       {...listeners}
       {...attributes}
     >
-      {[...Array(9)].map((_, i) => (
-        <Button key={9 - i} color='white' buttonValue={9 - i}>
-          {9 - i}
-        </Button>
-      ))}
-      <Button color='white' buttonValue={0} className={cnb("zero")}>
+      {[...Array(9)].map((_, i) => {
+        const num = 9 - i;
+        return (
+          <Button key={num} color='white' buttonValue={num} onClick={onClickDigits}>
+            {num}
+          </Button>
+        );
+      })}
+      <Button color='white' buttonValue={0} className={cnb("zero")} onClick={onClickDigits}>
         0
       </Button>
-      <Button color='white' buttonValue='dot' className={cnb("dot")}>
+      <Button color='white' buttonValue='dot' className={cnb("dot")} onClick={onClickDot}>
         ,
       </Button>
     </div>

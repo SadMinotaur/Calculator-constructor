@@ -13,8 +13,10 @@ export function draggingStyles(
     : undefined;
 }
 
-export interface DragProps {
+export interface CalculatorElementsProps {
   readonly id: string;
   readonly blockDrag?: boolean;
-  readonly disabledBlock?: boolean;
+  readonly isStatic?: boolean;
+  readonly noBorder?: boolean;
+  readonly runtime?: boolean;
 }

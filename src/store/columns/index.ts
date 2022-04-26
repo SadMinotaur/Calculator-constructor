@@ -34,6 +34,13 @@ const initialState = {
   constructorState: ConstructorState.constructor
 } as ColumnsState;
 
+function setAllElementsState(arr: ColumnElement[], state: ElementState): ColumnElement[] {
+  return arr.map((item) => ({
+    ...item,
+    state
+  }));
+}
+
 const columnsStateSlice = createSlice({
   name: "columnsState",
   initialState,
@@ -48,7 +55,7 @@ const columnsStateSlice = createSlice({
           state: item.type !== action.payload ? item.state : ElementState.static
         }));
         state.constructorColumn = state.constructorColumn.concat({
-          state: ElementState.draggable,
+          state: ElementState.dragged,
           type: action.payload,
           id: `${action.payload} constructor`
         });
@@ -65,17 +72,17 @@ const columnsStateSlice = createSlice({
     },
     setColumnsMode(state, action: PayloadAction<ConstructorState>) {
       if (action.payload === ConstructorState.runtime) {
-        state.elementsColumn = state.elementsColumn.map((item) => ({
-          ...item,
-          state: ElementState.static
-        }));
-        state.constructorColumn = state.constructorColumn.map((item) => ({
-          ...item,
-          state: ElementState.static
-        }));
+        state.constructorColumn = setAllElementsState(
+          state.constructorColumn,
+          ElementState.runtime
+        );
       }
-      // if (action.payload === ConstructorState.runtime) {
-      // }
+      if (action.payload === ConstructorState.constructor) {
+        state.constructorColumn = setAllElementsState(
+          state.constructorColumn,
+          ElementState.dragged
+        );
+      }
       state.constructorState = action.payload;
     }
   }

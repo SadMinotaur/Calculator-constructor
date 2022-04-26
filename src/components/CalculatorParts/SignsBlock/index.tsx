@@ -2,16 +2,32 @@ import React from "react";
 import classNames from "classnames/bind";
 import Button from "@components/Button";
 import { useSortable } from "@dnd-kit/sortable";
-import { draggingStyles, DragProps } from "@utils/dndUtils";
+import { draggingStyles, CalculatorElementsProps } from "@utils/dndUtils";
+import { useDispatch } from "react-redux";
+import { setSelectedSign } from "@store/monitor";
 import styles from "./styles.module.scss";
 
 const cnb = classNames.bind(styles);
 
-const SignsBlock: React.FC<DragProps> = ({ blockDrag, id }) => {
+const ButtonsArray: string[] = ["/", "x", "-", "+"];
+
+const SignsBlock: React.FC<CalculatorElementsProps> = ({
+  blockDrag,
+  id,
+  noBorder,
+  isStatic,
+  runtime
+}) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({
     id,
     disabled: blockDrag
   });
+
+  const dispatch = useDispatch();
+
+  function onSignClick(val: string): void {
+    if (runtime) dispatch(setSelectedSign(val));
+  }
 
   return (
     <div
@@ -19,25 +35,19 @@ const SignsBlock: React.FC<DragProps> = ({ blockDrag, id }) => {
         "blocksPadding",
         "wrapper",
         { cursorMove: isDragging },
-        { staticElement: blockDrag }
+        { staticElement: isStatic },
+        { noBorder }
       )}
       ref={setNodeRef}
       style={draggingStyles(transform, isDragging)}
       {...listeners}
       {...attributes}
     >
-      <Button color='white' buttonValue='/'>
-        /
-      </Button>
-      <Button color='white' buttonValue='x'>
-        x
-      </Button>
-      <Button color='white' buttonValue='-'>
-        -
-      </Button>
-      <Button color='white' buttonValue='+'>
-        +
-      </Button>
+      {ButtonsArray.map((item) => (
+        <Button color='white' buttonValue={item} key={item} onClick={onSignClick}>
+          {item}
+        </Button>
+      ))}
     </div>
   );
 };

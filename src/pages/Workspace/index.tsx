@@ -44,7 +44,7 @@ const Workspace: React.FC = () => {
   const dispatch = useDispatch();
   const columns = useSelector((state: RootState) => state.columns);
   const areaNotEmpty: boolean = columns.constructorColumn.length > 0;
-  const sortableContexItems = columns.constructorColumn.map((el) => el.id);
+  const sortableContextItems = columns.constructorColumn.map((el) => el.id);
   const [activeId, setActiveId] = React.useState<string | null>(null);
   const [lastTouched, setLastTouched] = React.useState<string | null>(null);
 
@@ -118,14 +118,16 @@ const Workspace: React.FC = () => {
       <div className={cnb("container")}>
         <div className={cnb("elements")}>
           <div className={cnb("box")}>
-            <RenderAreaElements elements={columns.elementsColumn} />
+            {columns.constructorState === ConstructorState.constructor && (
+              <RenderAreaElements elements={columns.elementsColumn} />
+            )}
           </div>
         </div>
         <div className={cnb("controls")}>
           <StateSwitch active={columns.constructorState} onClick={stateSwitch} />
         </div>
         <div className={cnb("dropArea")}>
-          <SortableContext items={sortableContexItems} strategy={verticalListSortingStrategy}>
+          <SortableContext items={sortableContextItems} strategy={verticalListSortingStrategy}>
             <DroppableArea itemsInside={columns.constructorColumn.length}>
               {areaNotEmpty ? (
                 <RenderAreaElements elements={columns.constructorColumn} />

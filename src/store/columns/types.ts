@@ -1,7 +1,8 @@
 export enum ElementState {
   draggable = "draggable",
   static = "static",
-  runtime = "runtime"
+  runtime = "runtime",
+  dragged = "dragged"
 }
 
 export enum ComponentsTypes {
