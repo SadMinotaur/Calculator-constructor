@@ -21,6 +21,7 @@ const DroppableArea: React.FC<Props> = ({ children, hasElements }) => {
   return (
     <div className={cnb("area", { filled: hasElements })} ref={setNodeRef} style={style}>
       {children}
+      {hasElements && isOver && <div className={cnb("line")} />}
     </div>
   );
 };
