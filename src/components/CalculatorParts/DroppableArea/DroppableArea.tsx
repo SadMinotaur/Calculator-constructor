@@ -6,13 +6,15 @@ import styles from "./styles.module.scss";
 const cnb = classNames.bind(styles);
 
 interface Props {
-  readonly hasElements?: boolean;
+  readonly itemsInside: number;
 }
 
-const DroppableArea: React.FC<Props> = ({ children, hasElements }) => {
+const DroppableArea: React.FC<Props> = ({ children, itemsInside }) => {
   const { isOver, setNodeRef } = useDroppable({
     id: "area constructor"
   });
+  const hasElements = itemsInside > 0;
+  const showLine = itemsInside > 0 && itemsInside < 4 && isOver;
 
   const style = {
     background: !hasElements && isOver ? "#F0F9FF" : undefined
@@ -21,7 +23,7 @@ const DroppableArea: React.FC<Props> = ({ children, hasElements }) => {
   return (
     <div className={cnb("area", { filled: hasElements })} ref={setNodeRef} style={style}>
       {children}
-      {hasElements && isOver && <div className={cnb("line")} />}
+      {showLine && <div className={cnb("line")} />}
     </div>
   );
 };

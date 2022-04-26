@@ -1,5 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ColumnsState, ComponentsTypes, ConstructorState, ElementState } from "./types";
+import {
+  ColumnElement,
+  ColumnsState,
+  ComponentsTypes,
+  ConstructorState,
+  ElementState
+} from "./types";
 
 const initialState = {
   elementsColumn: [
@@ -32,6 +38,9 @@ const columnsStateSlice = createSlice({
   name: "columnsState",
   initialState,
   reducers: {
+    setConstructorColumsState(state, action: PayloadAction<ColumnElement[]>) {
+      state.constructorColumn = action.payload;
+    },
     appendToConstructorColumn(state, action: PayloadAction<ComponentsTypes>) {
       if (!state.constructorColumn.find((item) => item.type === action.payload)) {
         state.elementsColumn = state.elementsColumn.map((item) => ({
@@ -45,10 +54,16 @@ const columnsStateSlice = createSlice({
         });
       }
     },
-    setAllColumsState(state, action: PayloadAction<ColumnsState>) {
-      state = action.payload;
+    removeFromConstructorColumn(state, action: PayloadAction<ComponentsTypes>) {
+      state.constructorColumn = state.constructorColumn.filter(
+        (item) => item.type !== action.payload
+      );
+      state.elementsColumn = state.elementsColumn.map((item) => ({
+        ...item,
+        state: item.type !== action.payload ? item.state : ElementState.draggable
+      }));
     },
-    setChangeMode(state, action: PayloadAction<ConstructorState>) {
+    setColumnsMode(state, action: PayloadAction<ConstructorState>) {
       if (action.payload === ConstructorState.runtime) {
         state.elementsColumn = state.elementsColumn.map((item) => ({
           ...item,
@@ -66,6 +81,10 @@ const columnsStateSlice = createSlice({
   }
 });
 
-export const { setAllColumsState, appendToConstructorColumn, setChangeMode } =
-  columnsStateSlice.actions;
+export const {
+  setConstructorColumsState,
+  appendToConstructorColumn,
+  setColumnsMode,
+  removeFromConstructorColumn
+} = columnsStateSlice.actions;
 export default columnsStateSlice.reducer;
