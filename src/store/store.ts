@@ -14,7 +14,7 @@ export type RootState = ReturnType<typeof reducers>;
 const persistedReducer = persistReducer(
   {
     key: "root",
-    whitelist: [],
+    // whitelist: [],
     storage
   },
   reducers
