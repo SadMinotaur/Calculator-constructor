@@ -1,20 +1,6 @@
-# React-Redux-Saga-Template
+# Calculator constructor
 
-Based on https://github.com/Revolt9k/react-redux-template.
+Deployed version: https://calculator-constructor-9e7bb.web.app/
 
-#### This template uses:
-
-- React
-- Redux
-- Redux-Saga
-- Redux-Persist
-- TypeScript
-- Scss
-- Airbnb eslint setup and basic prettier config
-
-#### Webpack build includes:
-
-- Aliases
-- Chunk splitting
-- Hot reload
-- Analyzing bundle size tool
+2 apps modes (runtime and constructor).
+You can delete items on dbclick.
